@@ -6,8 +6,110 @@
 <html>
   <head>
     <title>Make Lister</title>
+    <link rel="stylesheet" href="bower/makerstrap/dist/makerstrap.complete.min.css">
+    <meta name="csrf-token" content="{{csrfToken}}">
+    <meta name="makeapi-url" content="{{makeapi}}">
+    <style>
+      body {
+        background: #e3eaee;
+      }
+
+      .thumbnail {
+        border: 1px solid #ccc;
+        padding: 20px;
+        cursor: pointer;
+        transition: none;
+      }
+
+      table {
+        margin-top: 10px;
+        background: #fff;
+        width: 100%;
+      }
+
+      th, td {
+        padding: 10px;
+      }
+
+      td {
+        cursor: pointer;
+      }
+
+      .delete-btn {
+        position: relative;
+        left: 15px;
+      }
+
+      .make-thumb {
+        width: 50px !important;
+        padding-right: 10px;
+        display: inline !important;
+      }
+
+      .thumbnail > a {
+        padding-right: 10px;
+      }
+
+    </style>
   </head>
   <body>
-  <h1>YAY</h1>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a href="#" title="" class="navbar-brand">Make Lister</a>
+        </div>
+        <div class="collapse navbar-collapse" collapse="isCollapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a href="#" class="login hidden">Login</a>
+              <a href="#" class="logout">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="jumbotron">
+      <div class="container">
+        <h1>Make Lister</h1>
+        <p>
+          Curate lists of ordered Makes
+        </p>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-4" id="user-lists-container">
+          <input type="button" class="btn btn-primary" value="Create List" id="new-list-btn">
+          <table class="table-hover table-bordered">
+            <thead>
+              <tr>
+                <th>Your Lists:</th>
+              </tr>
+            </thead>
+            <tbody id="user-lists">
+            </tbody>
+          </table>
+          <!-- <input type="button" value="New List" id="new-list-btn"/> -->
+        </div>
+        <div class="col-sm-4">
+        <div class="form-group">
+          <label>Make Tag Search:</label><input class="form-control" type="text" name="search" id="search" value="">
+        </div>
+        <ul class="list-unstyled" id="make-search-list"></ul>
+        </div>
+        <div class="col-sm-4">
+          <label>Makes in List:</label>
+          <ul class="list-unstyled" id="loaded-list"></ul>
+          <input type="button" class="btn btn-primary" value="Save Changes" id="save-list-btn"/>
+          <input type="button" class="btn btn-primary" value="View List as Gallery" id="view-list-btn"/>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="https://login.persona.org/include.js"></script>
+    <script type="text/javascript" src="/bower/webmaker-auth-client/dist/webmaker-auth-client.min.js"></script>
+    <script type="text/javascript" src="/bower/makeapi-client/src/make-api.js"></script>
+    <script type="text/javascript" src="/bower/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/bower/jquery-ui/ui/minified/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/js/listEditor.js"></script>
   </body>
 </html>

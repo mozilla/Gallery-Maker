@@ -5,13 +5,17 @@
     "start": "node app"
   },
   "dependencies": {
+    "body-parser": "^1.0.2",
+    "bower": "^1.3.3",
     "express": "^4.0.0",
     "compression": "^1.0.1",
+    "csurf": "1.1.0",
     "habitat": "^1.1.0",
     "less-middleware": "^0.1.15",
     "makeapi-client": "https://github.com/cadecairos/makeapi-client/archive/makelists.tar.gz",
     "morgan": "^1.0.0",
-    "nunjucks": "^1.0.4"
+    "nunjucks": "^1.0.4",
+    "webmaker-auth": "0.0.14"
   },
   "devDependencies": {
     "gulp": "^3.6.2",
