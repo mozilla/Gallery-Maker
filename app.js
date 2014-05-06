@@ -6,30 +6,24 @@ var nunjucks = require('nunjucks');
 var csrf = require('csurf')();
 var MakeapiClient = require('makeapi-client');
 var path = require('path');
-var habitat = require("habitat");
 var WebmakerLogin = require('webmaker-auth');
-
-
-habitat.load();
-
-var env = new habitat();
 
 var app = express();
 
 var nunjucksEnv = new nunjucks.Environment(new nunjucks.FileSystemLoader(path.join(__dirname + '/views')), { autoescape: true });
 var makeClient = new MakeapiClient({
-  apiURL: env.get('MAKEAPI_URL'),
+  apiURL: process.env.MAKEAPI_URL,
   hawk: {
-    id: env.get('MAKEAPI_ID'),
-    key: env.get('MAKEAPI_KEY')
+    id: process.env.MAKEAPI_ID,
+    key: process.env.MAKEAPI_KEY
   }
 });
 
 var login = new WebmakerLogin({
-  loginURL: env.get('LOGIN_URL'),
-  secretKey: env.get('SECRET_KEY'),
-  domain: env.get('DOMAIN', null),
-  forceSSL: env.get('FORCE_SSL', false)
+  loginURL: process.env.LOGIN_URL,
+  secretKey: process.env.SECRET_KEY,
+  domain: process.env.DOMAIN,
+  forceSSL: process.env.FORCE_SSL
 });
 
 nunjucksEnv.express( app );
@@ -45,7 +39,7 @@ app.use(login.cookieParser());
 app.use(login.cookieSession());
 
 app.locals = {
-  makeapi: env.get("MAKEAPI_URL")
+  makeapi: process.env.MAKEAPI_URL
 };
 
 app.get('/', csrf, function(req, res) {
@@ -125,6 +119,6 @@ app.post('/verify', login.handlers.verify);
 app.post('/authenticate', login.handlers.authenticate);
 app.post('/logout', login.handlers.logout);
 
-app.listen(env.get('PORT'), function() {
-  console.log('App listening on ' + env.get('PORT'));
+app.listen(process.env.PORT, function() {
+  console.log('App listening on ' + process.env.PORT);
 });
