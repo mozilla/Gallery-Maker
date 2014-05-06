@@ -20,5 +20,8 @@
   "devDependencies": {
     "gulp": "^3.6.2",
     "gulp-jshint": "^1.5.5"
+  },
+  "engines": {
+    "node": "0.10.x"
   }
 }
