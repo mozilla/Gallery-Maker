@@ -82,7 +82,11 @@ app.post('/list', csrf, auth, function(req, res, next) {
 });
 
 app.put('/list/:id', csrf, auth, function(req, res, next) {
-  makeClient.updateList(req.params.id, req.body, function(err, data) {
+  makeClient.updateList(req.params.id, {
+    userId: req.session.user.id,
+    makes: req.body.makes,
+    title: req.body.title
+  }, function(err, data) {
     if ( err ) {
       return res.json(500, err);
     }
@@ -91,7 +95,7 @@ app.put('/list/:id', csrf, auth, function(req, res, next) {
 });
 
 app.del('/list/:id', csrf, auth, function(req, res, next) {
-  makeClient.removeList(req.params.id, function(err, data) {
+  makeClient.removeList(req.params.id, req.session.user.id, function(err, data) {
     if ( err ) {
       return res.json(500, err);
     }
@@ -109,7 +113,7 @@ app.get('/list/:id', csrf, auth, function(req, res, next) {
 });
 
 app.get('/lists/:user', csrf, auth, function(req, res, next) {
-  makeClient.getUserLists(req.params.user, function(err, data) {
+  makeClient.getUsersLists(req.params.user, function(err, data) {
     if ( err ) {
       return res.json(500, err);
     }

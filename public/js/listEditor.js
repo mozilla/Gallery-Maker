@@ -40,14 +40,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Specify a callback function for when the auth client successfully authenticates
   auth.on('login', function(data, message) {
-    $loginEl.parent().addClass('hidden');
-    $logoutEl.parent().removeClass('hidden');
+    $loginEl.addClass('hidden');
+    $logoutEl.removeClass('hidden');
   });
 
   // Specify a callback function for when the auth client successfully logs out
   auth.on('logout', function() {
-    $loginEl.parent().removeClass('hidden');
-    $logoutEl.parent().addClass('hidden');
+    $loginEl.removeClass('hidden');
+    $logoutEl.addClass('hidden');
   });
 
   // If there's an error logging in, run the specified callback
