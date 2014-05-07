@@ -10,18 +10,19 @@ document.addEventListener('DOMContentLoaded', function() {
       $noListLoaded = $('#no-list-loaded'),
       $searchArea = $('#search-area'),
       $listArea = $('#list-area'),
-      $success = $('#success');
+      $success = $('#success'),
+      $liTemplate = $('<li class="thumbnail"></li>'),
+      $tableTemplate = $('<tr><td></td></tr>'),
+      $deleteBtn = $('<span class="fa fa-trash-o delete-btn"></span>');
 
   var userId,
       username,
-      successTimeout;
+      successTimeout,
+      csrfToken = $('meta[name=\'csrf-token\']').attr('content');
 
-  var $liTemplate = $('<li class="thumbnail"></li>');
-  var $tableTemplate = $('<tr><td></td></tr>');
-  var $deleteBtn = $('<span class="fa fa-trash-o delete-btn"></span>');
-  var $loadedList = $('#loaded-list');
-
-  var csrfToken = $('meta[name=\'csrf-token\']').attr('content');
+  var makeClient = new Make({
+    apiURL: $('meta[name=\'makeapi-url\']').attr('content')
+  });
 
   $.ajaxSetup({
     contentType: 'application/json',
@@ -29,10 +30,6 @@ document.addEventListener('DOMContentLoaded', function() {
       'X-CSRF-Token': csrfToken
     },
     dataType: 'json'
-  });
-
-  var makeClient = new Make({
-    apiURL: $('meta[name=\'makeapi-url\']').attr('content')
   });
 
   // set up the WebmakerAuthClient
