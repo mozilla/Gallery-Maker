@@ -3,6 +3,7 @@
   "dependencies": {
     "jquery": "~2.1.0",
     "jquery-ui": "~1.10.4",
+    "makeapi-client": "https://github.com/cadecairos/makeapi-client/archive/makelists.tar.gz",
     "makerstrap": "~0.1.7",
     "masonry": "~3.1.5",
     "webmaker-auth-client": "^0.0.29"
