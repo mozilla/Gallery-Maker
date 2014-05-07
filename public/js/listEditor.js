@@ -1,13 +1,20 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener('DOMContentLoaded', function() {
 
   var $loginEl = $('.login'),
       $logoutEl = $('.logout'),
       $saveListBtn = $('#save-list-btn'),
       $viewListBtn = $('#view-list-btn'),
-      $newListBtn = $('#new-list-btn');
+      $newListBtn = $('#new-list-btn'),
+      $loadedList = $('#loaded-list'),
+      $searchList = $('#make-search-list'),
+      $noListLoaded = $('#no-list-loaded'),
+      $searchArea = $('#search-area'),
+      $listArea = $('#list-area'),
+      $success = $('#success');
 
   var userId,
-      username;
+      username,
+      successTimeout;
 
   var $liTemplate = $('<li class="thumbnail"></li>');
   var $tableTemplate = $('<tr><td></td></tr>');
@@ -17,11 +24,11 @@ document.addEventListener("DOMContentLoaded", function() {
   var csrfToken = $('meta[name=\'csrf-token\']').attr('content');
 
   $.ajaxSetup({
-    contentType: "application/json",
+    contentType: 'application/json',
     headers: {
-      "X-CSRF-Token": csrfToken
+      'X-CSRF-Token': csrfToken
     },
-    dataType: "json"
+    dataType: 'json'
   });
 
   var makeClient = new Make({
@@ -37,6 +44,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
   $saveListBtn.hide();
   $viewListBtn.hide();
+  $success.hide();
+  $noListLoaded.show();
+  $searchArea.hide();
+  $listArea.hide();
 
   // Specify a callback function for when the auth client successfully authenticates
   auth.on('login', function(data, message) {
@@ -52,18 +63,35 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // If there's an error logging in, run the specified callback
   auth.on('error', function(err) {
-    alert(err);
+    console.error(err);
   });
 
   function loadList(id) {
-    var $loadedList = $('#loaded-list');
+    $noListLoaded.hide();
+    $searchArea.show();
+    $listArea.show();
     $loadedList.empty();
     $.getJSON('list/' + id, function(data) {
       data.forEach(function(make) {
         addToList(make._id, make.title, make.thumbnail, make.url, make.author);
       });
       $loadedList.attr('data-list-id', id);
-      $loadedList.sortable({ containment: "parent" });
+      $loadedList.sortable({
+        containment: 'parent',
+        tolerance: 'pointer',
+        update: function( event, ui ) {
+          if ( ui.item.has('.delete-btn').length ) {
+            return;
+          }
+          ui.item.append(
+            $deleteBtn
+            .clone()
+            .click(function() {
+              $(this).parent().remove();
+            })
+          );
+        }
+      });
       $saveListBtn.show();
       $viewListBtn.show();
     });
@@ -77,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function() {
         $userLists.append(
           $tableTemplate
           .clone()
-          .find("td")
+          .find('td')
           .attr('data-list-id', list._id)
           .text(list.title)
           .append(
@@ -91,15 +119,17 @@ document.addEventListener("DOMContentLoaded", function() {
                 url: 'list/' + $this.parent().attr('data-list-id'),
                 type: 'delete',
                 success: function() {
-                  alert('list Deleted!');
                   getLists(userId);
                   $this.parent().remove();
                   $loadedList.empty();
+                  $noListLoaded.show();
+                  $searchArea.hide();
+                  $listArea.hide();
                   $saveListBtn.hide();
                   $viewListBtn.hide();
                 },
                 error: function() {
-                  alert('error Deleting');
+                  console.error('error Deleting');
                 }
               });
             })
@@ -133,10 +163,16 @@ document.addEventListener("DOMContentLoaded", function() {
         makes: listData
       }),
       success: function() {
-        alert('list saved!');
+        $success.show();
+        if ( successTimeout ) {
+          window.clearTimeout( successTimeout );
+        }
+        successTimeout = window.setTimeout(function() {
+          $success.hide();
+        }, 3500 );
       },
       error: function() {
-        alert('error saving');
+        console.error('error saving');
       }
     });
   });
@@ -162,20 +198,19 @@ document.addEventListener("DOMContentLoaded", function() {
   function search() {
     makeClient.tags( $('#search').val()).then(function( err, makes ) {
       if ( err ) {
-        return alert( err );
+        return console.error( err );
       }
-      var $list = $('#make-search-list');
-      $list.empty();
+      $searchList.empty();
       makes.forEach(function(make) {
-        $list.append(
+        $searchList.append(
           $liTemplate.clone()
           .attr('data-make-id', make.id)
           .attr('data-make-thumbnail', make.thumbnail)
           .attr('data-make-url', make.url)
-          .attr('data-make-author', make.author)
+          .attr('data-make-author', make.username)
           .append('<image class="make-thumb" src="' + make.thumbnail + '"/>')
           .append('Title: <a href="'+ make.url + '">' + make.title + '</a>')
-          .append('<span> By: ' + make.author + '</span>')
+          .append('<span> By: ' + make.username + '</span>')
           .click(function() {
             var that = $(this),
                 title = that.text(),
@@ -185,6 +220,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 author = that.attr('data-make-author');
 
             addToList(id, title, thumbnail, url, author);
+          })
+          .draggable({
+            appendTo: 'body',
+            connectToSortable: '#loaded-list',
+            helper: 'clone'
           })
         );
       });
@@ -205,7 +245,7 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   $newListBtn.click(function() {
-    var title = prompt("Enter a title!");
+    var title = prompt('Enter a title!');
 
     $.ajax({
       url: 'list',
@@ -217,11 +257,10 @@ document.addEventListener("DOMContentLoaded", function() {
         username: username
       }),
       success: function() {
-        alert('list Created!');
         getLists(userId);
       },
       error: function() {
-        alert('error Creating');
+        console.error('Error Creating New List');
       }
     });
   });

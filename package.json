@@ -1,6 +1,7 @@
 {
-  "name": "MakeLister",
+  "name": "Gallery-Maker",
   "version": "0.0.1",
+  "author": "Christopher De Cairos <cade@mozillafoundation.org>",
   "scripts": {
     "start": "node app",
     "postinstall": "bower install"

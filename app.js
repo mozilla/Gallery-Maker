@@ -107,7 +107,7 @@ app.get('/list/:id', csrf, auth, function(req, res, next) {
 });
 
 app.get('/lists/:user', csrf, auth, function(req, res, next) {
-  makeClient.getUsersLists(req.params.user, function(err, data) {
+  makeClient.getListsByUser(req.params.user, function(err, data) {
     if ( err ) {
       return res.json(500, err);
     }

@@ -5,13 +5,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Make Lister</title>
+    <title>Gallery Maker</title>
     <link rel="stylesheet" href="bower/makerstrap/dist/makerstrap.complete.min.css">
     <meta name="csrf-token" content="{{csrfToken}}">
     <meta name="makeapi-url" content="{{makeapi}}">
     <style>
       body {
         background: #e3eaee;
+        padding-top: 70px;
       }
 
       .thumbnail {
@@ -22,7 +23,6 @@
       }
 
       table {
-        margin-top: 10px;
         background: #fff;
         width: 100%;
       }
@@ -50,13 +50,27 @@
         padding-right: 10px;
       }
 
+      #success {
+        color: #c13832;
+      }
+
+      #new-list-container {
+        padding-top: 5px;
+      }
+
+      #list-view, #search-list-view {
+        max-height: 500px;
+        overflow-y: auto;
+        overflow-x: none;
+      }
+
     </style>
   </head>
   <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-          <a href="#" title="" class="navbar-brand">Make Lister</a>
+          <a href="#" title="" class="navbar-brand">Gallery Maker</a>
         </div>
         <div class="collapse navbar-collapse" collapse="isCollapse">
           <ul class="nav navbar-nav navbar-right">
@@ -68,40 +82,52 @@
         </div>
       </div>
     </nav>
-    <div class="jumbotron">
-      <div class="container">
-        <h1>Make Lister</h1>
-        <p>
-          Curate lists of ordered Makes
-        </p>
-      </div>
-    </div>
     <div class="container">
       <div class="row">
-        <div class="col-sm-4" id="user-lists-container">
-          <input type="button" class="btn btn-primary" value="Create List" id="new-list-btn">
-          <table class="table-hover table-bordered">
-            <thead>
-              <tr>
-                <th>Your Lists:</th>
-              </tr>
-            </thead>
-            <tbody id="user-lists">
-            </tbody>
-          </table>
-          <!-- <input type="button" value="New List" id="new-list-btn"/> -->
+        <div class="container col-sm-4" id="user-lists-container">
+          <div class="container col-sm-12 text-center">
+            <h3>Your Lists</h3>
+          </div>
+          <div class="container col-sm-12">
+            <table class="table-hover table-bordered">
+              <tbody id="user-lists">
+              </tbody>
+            </table>
+          </div>
+          <div class="container col-sm-10 col-sm-offset-1" id="new-list-container">
+              <input type="button" class="btn btn-primary col-sm-12" value="Create New List" id="new-list-btn">
+          </div>
         </div>
-        <div class="col-sm-4">
-        <div class="form-group">
-          <label>Make Tag Search:</label><input class="form-control" type="text" name="search" id="search" value="">
+        <div class="container col-sm-8 text-center" id="no-list-loaded">
+            <h2>Select a list on the left to begin editing!</h2>
         </div>
-        <ul class="list-unstyled" id="make-search-list"></ul>
+        <div class="col-sm-4" id="search-area">
+          <div class="container col-sm-12 text-center">
+            <h3>Make Search</h3>
+          </div>
+          <div class="container col-sm-12 form-group">
+            <input class="form-control" type="text" name="search" id="search" value="" placeholder="Search Term">
+          </div>
+          <div class="col-sm-12" id="search-list-view">
+            <ul class="list-unstyled" id="make-search-list"></ul>
+          </div>
         </div>
-        <div class="col-sm-4">
-          <label>Makes in List:</label>
-          <ul class="list-unstyled" id="loaded-list"></ul>
-          <input type="button" class="btn btn-primary" value="Save Changes" id="save-list-btn"/>
-          <input type="button" class="btn btn-primary" value="View List as Gallery" id="view-list-btn"/>
+        <div class="col-sm-4" id="list-area">
+          <div class="container col-sm-12 text-center">
+            <h3>Makes in List</h3>
+          </div>
+          <div class="container col-sm-12" id="list-view">
+            <ul class="list-unstyled" id="loaded-list"></ul>
+          </div>
+          <div class="container col-sm-6">
+            <input type="button" class="btn btn-primary col-sm-12" value="Save Changes" id="save-list-btn"/>
+          </div>
+          <div class="container col-sm-6">
+            <input type="button" class="btn btn-primary col-sm-12" value="Preview List" id="view-list-btn"/>
+          </div>
+          <div class="container col-sm-12 text-center" id="success">
+            <h3>Successfully saved!</h3>
+          </div>
         </div>
       </div>
     </div>
