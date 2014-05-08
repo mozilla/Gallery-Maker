@@ -1,14 +1,12 @@
-var express = require('express');
-var compress = require('compression')();
-var bodyparser = require('body-parser');
-var morgan = require('morgan');
-var nunjucks = require('nunjucks');
-var csrf = require('csurf')();
-var MakeapiClient = require('makeapi-client');
 var path = require('path');
-var WebmakerLogin = require('webmaker-auth');
+var express = require('express');
+var nunjucks = require('nunjucks');
+var helmet = require("helmet");
+var WebmakerAuth = require('webmaker-auth');
+var MakeapiClient = require('makeapi-client');
 
 var app = express();
+var csrf = express.csrf();
 
 var nunjucksEnv = new nunjucks.Environment(new nunjucks.FileSystemLoader(path.join(__dirname + '/views')), { autoescape: true });
 var makeClient = new MakeapiClient({
@@ -19,7 +17,7 @@ var makeClient = new MakeapiClient({
   }
 });
 
-var login = new WebmakerLogin({
+var webmakerAuth = new WebmakerAuth({
   loginURL: process.env.LOGIN_URL,
   secretKey: process.env.SECRET_KEY,
   domain: process.env.DOMAIN,
@@ -29,18 +27,38 @@ var login = new WebmakerLogin({
 nunjucksEnv.express( app );
 
 app.disable('x-powered-by');
-app.use(morgan('dev'));
-app.use(compress);
+
+if (process.env.ENABLE_GELF_LOGS) {
+  messina = require('messina');
+  logger = messina('gallerymaker-' + process.env.NODE_ENV || 'development');
+  logger.init();
+  app.use(logger.middleware());
+} else {
+  app.use(express.logger('dev'));
+}
+
+app.use(helmet.iexss());
+app.use(helmet.contentTypeOptions());
+app.use(helmet.xframe());
+
+if ( !!process.env.FORCE_SSL ) {
+  app.use(helmet.hsts());
+  app.enable("trust proxy");
+}
+
+app.use(express.compress());
 app.use(express.static(path.join( __dirname + '/public')));
 
-app.use(bodyparser.json());
-app.use(bodyparser.urlencoded());
-app.use(login.cookieParser());
-app.use(login.cookieSession());
+app.use(express.json());
+app.use(express.urlencoded());
+app.use(webmakerAuth.cookieParser());
+app.use(webmakerAuth.cookieSession());
 
-app.locals = {
+app.locals({
   makeapi: process.env.MAKEAPI_URL
-};
+});
+
+app.use(app.router);
 
 app.get('/', csrf, function(req, res) {
   res.render('index.html', {
@@ -63,7 +81,7 @@ function auth( req, res, next ) {
   if ( req.session && req.session.user ) {
     return next();
   }
-  res.json(403, 'GTFO');
+  res.json(403, 'unauthorised');
 }
 
 app.post('/list', csrf, auth, function(req, res, next) {
@@ -97,7 +115,7 @@ app.del('/list/:id', csrf, auth, function(req, res, next) {
   });
 });
 
-app.get('/list/:id', csrf, auth, function(req, res, next) {
+app.get('/list/:id', function(req, res, next) {
   makeClient.getList(req.params.id, function(err, data) {
     if ( err ) {
       return res.json(500, err);
@@ -106,7 +124,7 @@ app.get('/list/:id', csrf, auth, function(req, res, next) {
   }, true );
 });
 
-app.get('/lists/:user', csrf, auth, function(req, res, next) {
+app.get('/lists/:user', function(req, res, next) {
   makeClient.getListsByUser(req.params.user, function(err, data) {
     if ( err ) {
       return res.json(500, err);
@@ -115,9 +133,9 @@ app.get('/lists/:user', csrf, auth, function(req, res, next) {
   });
 });
 
-app.post('/verify', login.handlers.verify);
-app.post('/authenticate', login.handlers.authenticate);
-app.post('/logout', login.handlers.logout);
+app.post('/verify', webmakerAuth.handlers.verify);
+app.post('/authenticate', webmakerAuth.handlers.authenticate);
+app.post('/logout', webmakerAuth.handlers.logout);
 
 app.listen(process.env.PORT, function() {
   console.log('App listening on ' + process.env.PORT);
