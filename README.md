@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/cadecairos/Gallery-Maker.png)](https://travis-ci.org/cadecairos/Gallery-Maker)
+[![Build Status](https://travis-ci.org/mozilla/Gallery-Maker.png)](https://travis-ci.org/mozilla/Gallery-Maker)
 
 
 Gallery Maker
