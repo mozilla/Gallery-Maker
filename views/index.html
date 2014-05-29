@@ -64,6 +64,13 @@
         overflow-x: none;
       }
 
+      .list-title, .list-description {
+        max-width: 50px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+
     </style>
   </head>
   <body>
@@ -91,6 +98,13 @@
           <div class="container col-sm-12">
             <table class="table-hover table-bordered">
               <tbody id="user-lists">
+                <thead>
+                  <tr>
+                    <th class="text-center">title</th>
+                    <th class="text-center">description</th>
+                    <th class="text-center">delete</th>
+                  </tr>
+                </thead>
               </tbody>
             </table>
           </div>

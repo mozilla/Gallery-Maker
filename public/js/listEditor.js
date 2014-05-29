@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
       $listArea = $('#list-area'),
       $success = $('#success'),
       $liTemplate = $('<li class="thumbnail"></li>'),
-      $tableTemplate = $('<tr><td></td></tr>'),
+      $tableTemplate = $('<tr><td class="list-title"></td><td class="list-description"></td><td class="list-delete"></td></tr>'),
       $deleteBtn = $('<span class="fa fa-trash-o delete-btn"></span>');
 
   var userId,
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
     $listArea.show();
     $loadedList.empty();
     $.getJSON('list/' + id, function(data) {
-      data.forEach(function(make) {
+      data.makes.forEach(function(make) {
         addToList(make._id, make.title, make.thumbnail, make.url, make.author);
       });
       $loadedList.attr('data-list-id', id);
@@ -99,51 +99,57 @@ document.addEventListener('DOMContentLoaded', function() {
       var $userLists = $('#user-lists');
       $userLists.empty();
       data.lists.forEach(function(list) {
-        $userLists.append(
-          $tableTemplate
+        var listItem = $tableTemplate.clone();
+        var title = listItem.find('td.list-title');
+        var description = listItem.find('td.list-description');
+        var listDelete = listItem.find('td.list-delete');
+
+        title.attr('data-list-id', list._id);
+        title.text(list.title);
+
+        listItem.find('.list-title, .list-description').click(function() {
+          loadList(title.attr('data-list-id'));
+        });
+
+        description.text(list.description);
+        listDelete.append(
+          $deleteBtn
           .clone()
-          .find('td')
-          .attr('data-list-id', list._id)
-          .text(list.title)
-          .append(
-            $deleteBtn
-            .clone()
-            .click(function( e ) {
-              e.stopPropagation();
-              e.preventDefault();
-              var $this = $(this);
-              $.ajax({
-                url: 'list/' + $this.parent().attr('data-list-id'),
-                type: 'delete',
-                success: function() {
-                  getLists(userId);
-                  $this.parent().remove();
-                  $loadedList.empty();
-                  $noListLoaded.show();
-                  $searchArea.hide();
-                  $listArea.hide();
-                  $saveListBtn.hide();
-                  $viewListBtn.hide();
-                },
-                error: function() {
-                  console.error('error Deleting');
-                }
-              });
-            })
-          )
-          .click(function() {
-            loadList($(this).attr('data-list-id'));
+          .click(function( e ) {
+            e.stopPropagation();
+            e.preventDefault();
+            var $this = $(this);
+            $.ajax({
+              url: 'list/' + title.attr('data-list-id'),
+              type: 'delete',
+              success: function() {
+                getLists(userId);
+                $this.parent().remove();
+                $loadedList.empty();
+                $noListLoaded.show();
+                $searchArea.hide();
+                $listArea.hide();
+                $saveListBtn.hide();
+                $viewListBtn.hide();
+              },
+              error: function() {
+                console.error('error Deleting');
+              }
+            });
           })
-          .parent()
         );
+
+        $userLists.append(listItem);
       });
     });
   }
 
-  auth.on('login', function(data) {
-    getLists(data.id);
-    userId = data.id;
-    username = data.username;
+  auth.on('login', function(data, reason) {
+    if ( reason !== 'restored' ) {
+      getLists(data.id);
+      userId = data.id;
+      username = data.username;
+    }
   });
 
   $saveListBtn.click(function() {
@@ -241,14 +247,32 @@ document.addEventListener('DOMContentLoaded', function() {
     window.open('/view/' + $loadedList.attr('data-list-id'), '_blank');
   });
 
+  var escapeMap = {
+      '&': '&amp;',
+      '"': '&quot;',
+      "'": '&#39;',
+      "<": '&lt;',
+      ">": '&gt;'
+  };
+
+  function lookupEscape(ch) {
+    return escapeMap[ch];
+  }
+
+  function sanitize( val ) {
+    return val.replace(/[&"'<>]/g, lookupEscape);
+  }
+
   $newListBtn.click(function() {
-    var title = prompt('Enter a title!');
+    var title = sanitize(prompt('Enter a title!'));
+    var description = sanitize(prompt('Enter a description!'));
 
     $.ajax({
       url: 'list',
       type: 'post',
       data: JSON.stringify({
         title: title,
+        description: description,
         makes: [],
         userId: userId,
         username: username

@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Gallery Preview</title>
+    <title>Gallery : {{ list.title }}</title>
     <link rel="stylesheet" href="/bower/makerstrap/dist/makerstrap.complete.min.css">
     <meta name="csrf-token" content="{{csrfToken}}">
     <meta name="makeapi-url" content="{{makeapi}}">
@@ -20,7 +20,7 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-          <a href="#" title="" class="navbar-brand">Gallery Preview</a>
+          <a href="#" title="" class="navbar-brand">{{ list.title }} - {{ list.description }}</a>
         </div>
       </div>
     </nav>
@@ -28,7 +28,7 @@
       <div class="gallery">
         <div class="container">
           <div class="row">
-            {% for make in list %}
+            {% for make in list.makes %}
               <div class="gallery-item col-xs-12 col-sm-4 col-lg-3 ng-scope">
                 <div class="thumbnail">
                   <div class="thumbnail-wrapper" style="background-image:url({{make.thumbnail}})"></div>
