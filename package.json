@@ -13,7 +13,7 @@
     "habitat": "^1.1.0",
     "helmet": "^0.1.2",
     "less-middleware": "^0.1.15",
-    "makeapi-client": "https://github.com/cadecairos/makeapi-client/archive/makelists.tar.gz",
+    "makeapi-client": "^0.5.26",
     "messina": "^0.1.1",
     "nunjucks": "^1.0.4",
     "webmaker-auth": "^0.0.14"
