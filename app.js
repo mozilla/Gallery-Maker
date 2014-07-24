@@ -37,8 +37,8 @@ if (process.env.ENABLE_GELF_LOGS) {
   app.use(express.logger('dev'));
 }
 
-app.use(helmet.iexss());
-app.use(helmet.contentTypeOptions());
+app.use(helmet.xssFilter());
+app.use(helmet.nosniff());
 app.use(helmet.xframe());
 
 if ( !!process.env.FORCE_SSL ) {
