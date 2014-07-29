@@ -6,7 +6,8 @@
   "scripts": {
     "start": "foreman start",
     "download-locales": "webmaker-download-locales gallerymaker",
-    "test": "grunt validate"
+    "test": "grunt validate",
+    "postinstall": "bower install; grunt build"
   },
   "dependencies": {
     "bower": "^1.3.8",
