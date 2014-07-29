@@ -5,7 +5,7 @@ angular.module('GalleryMaker.services', [])
   .constant('analytics', window.analytics)
   .constant('Make', window.Make)
   .factory('makeService', ['Make', 'config',
-    function(Make, config) {
+    function (Make, config) {
       var client = new Make({
         apiURL: config.makeapiURL
       });
@@ -98,14 +98,14 @@ angular.module('GalleryMaker.services', [])
     function ($resource) {
       return $resource('/lists/:user', {
         getLists: {
-          method: "GET",
+          method: 'GET',
           withCredentials: true
         }
       });
     }
   ])
   .factory('makeSearchService', ['Make', 'config',
-    function (Make, config){
+    function (Make, config) {
       var client = new Make({
         apiURL: config.makeapiURL
       });

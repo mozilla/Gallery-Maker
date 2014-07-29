@@ -29,11 +29,11 @@
                 <th class="text-center">delete</th>
               </tr>
             </thead>
-            <tr ng-repeat="list in usersLists">
+            <tr ng-repeat="list in usersLists" ng-click="loadList(list._id)">
               <td class="list-title">{{list.title}}</td>
-              <td class="list-description" ng-click="loadList(list._id)">{{list.description}}</td>
+              <td class="list-description">{{list.description}}</td>
               <td class="list-delete">
-                <span class="fa fa-trash-o delete-btn" ng-click="deleteList(list._id);"></span>
+                <span class="fa fa-trash-o delete-btn" ng-click="deleteList(list._id, $event);"></span>
               </td>
             </tr>
           </tbody>

@@ -14,12 +14,12 @@ angular.module('GalleryMaker.directives', [])
       }
     };
   })
-  .directive('ngFlash', function() {
+  .directive('ngFlash', function () {
     return {
       restrict: 'A',
-      link: function(scope, el, attrs) {
-        scope.$watch(attrs.ngFlash, function(value) {
-          if ( value ) {
+      link: function (scope, el, attrs) {
+        scope.$watch(attrs.ngFlash, function (value) {
+          if (value) {
             el.fadeIn();
           } else {
             el.fadeOut();

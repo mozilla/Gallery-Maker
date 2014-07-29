@@ -11,7 +11,7 @@ angular.module('GalleryMaker', [
   'GalleryMaker.controllers',
 ]).
 config(['$routeProvider', '$locationProvider',
-  function($routeProvider, $locationProvider) {
+  function ($routeProvider, $locationProvider) {
     if (window.location.href !== decodeURI(window.location.href)) {
       window.location.href = decodeURI(window.location.href);
     }
@@ -22,13 +22,13 @@ config(['$routeProvider', '$locationProvider',
       templateUrl: '/views/editor.html',
       controller: 'editorController'
     })
-    .when('/:id', {
-      templateUrl: 'views/list.html',
-      controller: 'listController'
-    })
-    .otherwise({
-      redirectTo: '/'
-    });
+      .when('/:id', {
+        templateUrl: 'views/list.html',
+        controller: 'listController'
+      })
+      .otherwise({
+        redirectTo: '/'
+      });
   }
 ]).
 run(['$http', '$rootScope',

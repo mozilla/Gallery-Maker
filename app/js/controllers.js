@@ -13,11 +13,13 @@ angular.module('GalleryMaker.controllers', [])
       // User's lists
       var lastEmail;
 
-      function refreshLists() {
+      function refreshLists(done) {
+        done = done || function () {};
         userListsService.get({
           user: $scope._user.id
         }, function (data) {
           $scope.usersLists = data.lists;
+          done();
         }, function (err) {
           console.error(err);
         });
@@ -25,7 +27,7 @@ angular.module('GalleryMaker.controllers', [])
 
       function getLists() {
         var email = $rootScope._user ? $rootScope._user.email : '';
-        if ( email && email !== lastEmail ) {
+        if (email && email !== lastEmail) {
           lastEmail = email;
           refreshLists();
         } else {
@@ -36,41 +38,44 @@ angular.module('GalleryMaker.controllers', [])
 
       $rootScope.$watch('_user', getLists);
 
-      $scope.deleteList = function(listId) {
-        if ( !window.confirm("Are you sure you want to delete this list?") ) {
+      $scope.deleteList = function (listId, event) {
+        event.stopPropagation();
+        if (!window.confirm('Are you sure you want to delete this list?')) {
           return;
         }
 
-        if ( $scope.listLoaded && $scope.loadedListId === listId ) {
-          $scope.loadedList = $scope.loadedListId = $scope.listLoaded = null
+        if ($scope.listLoaded && $scope.loadedListId === listId) {
+          $scope.loadedList = $scope.loadedListId = $scope.listLoaded = null;
         }
 
         listService.delete({
           id: listId
-        }, refreshLists, function(err){
+        }, function () {
+          refreshLists();
+        }, function (err) {
           console.error(err);
         });
       };
 
       var escapeMap = {
-          '&': '&amp;',
-          '"': '&quot;',
-          "'": '&#39;',
-          '<': '&lt;',
-          '>': '&gt;'
+        '&': '&amp;',
+        '"': '&quot;',
+        '\'': '&#39;',
+        '<': '&lt;',
+        '>': '&gt;'
       };
 
       function lookupEscape(ch) {
         return escapeMap[ch];
       }
 
-      function sanitize( val ) {
+      function sanitize(val) {
         return val.replace(/[&"'<>]/g, lookupEscape);
       }
 
-      $scope.createList = function() {
-        var title = sanitize(prompt('Enter a title!'));
-        var description = sanitize(prompt('Enter a description!'));
+      $scope.createList = function () {
+        var title = sanitize(window.prompt('Enter a title!'));
+        var description = sanitize(window.prompt('Enter a description!'));
 
         listService.save({}, {
           title: title,
@@ -78,14 +83,13 @@ angular.module('GalleryMaker.controllers', [])
           makes: [],
           userId: $rootScope._user.id,
           username: $rootScope._user.username
-        }, function(data) {
-          console.log( data );
-          refreshLists(function() {
-            loadList(data._id);
+        }, function (data) {
+          refreshLists(function () {
+            $scope.loadList(data._id);
           });
-        }, function(err) {
+        }, function (err) {
           console.error(err);
-        })
+        });
       };
 
       getLists();
@@ -95,18 +99,17 @@ angular.module('GalleryMaker.controllers', [])
       $scope.listSaveError = false;
       $scope.listSaveSuccess = false;
 
-
       $scope.sortableOptions = {
         containment: 'parent',
         tolerance: 'pointer',
-        stop: function() {
-          saveList($scope.loadedList.map(function(make){
+        stop: function () {
+          saveList($scope.loadedList.map(function (make) {
             return make._id;
           }));
         }
       };
 
-      $scope.loadList = function(id) {
+      $scope.loadList = function (id) {
         listService.get({
           id: id
         }, function (data) {
@@ -118,33 +121,33 @@ angular.module('GalleryMaker.controllers', [])
         });
       };
 
-      function saveList(list){
+      function saveList(list) {
         listService.update({
           id: $scope.loadedListId
         }, {
           makes: list
-        }, function() {
+        }, function () {
           $scope.listSaveInProgress = false;
           $scope.listSaveSuccess = true;
-          $timeout(function() {
+          $timeout(function () {
             $scope.listSaveSuccess = false;
           }, 2500);
-        }, function() {
+        }, function () {
           $scope.listSaveInProgress = false;
           $scope.listSaveError = true;
-          $timeout(function() {
+          $timeout(function () {
             $scope.listSaveError = false;
           }, 2500);
         });
       }
 
-      $scope.addMake = function(newMake) {
+      $scope.addMake = function (newMake) {
 
-        var isInList = $scope.loadedList.some(function(make) {
+        var isInList = $scope.loadedList.some(function (make) {
           return make._id === newMake._id;
         });
 
-        if ( isInList ) {
+        if (isInList) {
           return;
         }
 
@@ -152,32 +155,32 @@ angular.module('GalleryMaker.controllers', [])
 
         $scope.loadedList.push(newMake);
 
-        saveList($scope.loadedList.map(function(make){
+        saveList($scope.loadedList.map(function (make) {
           return make._id;
         }));
       };
 
-      $scope.removeMake = function(id) {
+      $scope.removeMake = function (id) {
         $scope.listSaveInProgress = true;
 
-        $scope.loadedList = $scope.loadedList.filter(function(make) {
+        $scope.loadedList = $scope.loadedList.filter(function (make) {
           return make._id !== id;
         });
 
-        saveList($scope.loadedList.map(function(m){
+        saveList($scope.loadedList.map(function (m) {
           return m._id;
         }));
       };
 
-      $scope.showPreview = function() {
-        window.location.pathname = "/#!/" + $scope.loadedListId;
+      $scope.showPreview = function () {
+        window.location.pathname = '/#!/' + $scope.loadedListId;
       };
 
       // Make Searching
       $scope.search = {};
       $scope.search.type = 'tags';
-      $scope.doSearch = function() {
-        makeService.search($scope.search.type, $scope.search.value, function(e, makes) {
+      $scope.doSearch = function () {
+        makeService.search($scope.search.type, $scope.search.value, function (e, makes) {
           $scope.searchResults = makes;
           if (!$rootScope.$$phase) {
             $rootScope.$apply();
@@ -190,9 +193,9 @@ angular.module('GalleryMaker.controllers', [])
     function ($rootScope, $scope, $routeParams, listService) {
       listService.get({
         id: $routeParams.id
-      }, function(data) {
+      }, function (data) {
         $scope.list = data;
-      }, function(err) {
+      }, function (err) {
         console.error(err);
       });
     }
