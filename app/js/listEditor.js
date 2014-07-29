@@ -248,11 +248,11 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   var escapeMap = {
-      '&': '&amp;',
-      '"': '&quot;',
-      "'": '&#39;',
-      "<": '&lt;',
-      ">": '&gt;'
+    '&': '&amp;',
+    '"': '&quot;',
+    "'": '&#39;',
+    "<": '&lt;',
+    ">": '&gt;'
   };
 
   function lookupEscape(ch) {

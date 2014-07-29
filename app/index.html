@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en" ng-app="GalleryMaker" ng-csp>
+<head>
+  <meta name="fragment" content="!">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+  <meta charset="utf-8">
+
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://webmaker.org/img/logo-og.png">
+  <meta property="og:image:width" content="1400" />
+  <meta property="og:image:height" content="1400" />
+  <meta property="og:site_name" content="Gallery Maker">
+
+  <title ng-bind="'_gallery_maker_' | i18n"></title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700">
+  <style>
+    html, body {
+      display: none;
+    }
+  </style>
+  <link rel="stylesheet" href="bower/makerstrap/dist/makerstrap.complete.min.css">
+  <link rel="stylesheet" ng-href="compiled/app.min.{{direction}}.css">
+</head>
+<body>
+
+  <div class="view-animate" role="main" ng-view></div>
+  <div ng-controller="verifyController"></div>
+
+  <script src="config.js"></script>
+
+  <script src="https://login.persona.org/include.js"></script>
+  <script src="bower/webmaker-analytics/analytics.js"></script>
+  <script src="bower/eventEmitter/EventEmitter.min.js"></script>
+  <script src="bower/webmaker-auth-client/dist/webmaker-auth-client.min.js"></script>
+  <script src="bower/jquery/dist/jquery.min.js"></script>
+  <script src="bower/jquery-ui/ui/minified/jquery.ui.core.min.js"></script>
+  <script src="bower/jquery-ui/ui/minified/jquery.ui.widget.min.js"></script>
+  <script src="bower/jquery-ui/ui/minified/jquery.ui.mouse.min.js"></script>
+  <script src="bower/jquery-ui/ui/minified/jquery.ui.sortable.min.js"></script>
+  <script src="bower/makeapi-client/src/make-api.js"></script>
+  <script src="bower/angular/angular.min.js"></script>
+  <script src="bower/angular-sanitize/angular-sanitize.min.js"></script>
+  <script src="bower/angular-resource/angular-resource.min.js"></script>
+  <script src="bower/angular-route/angular-route.min.js"></script>
+  <script src="bower/angular-bootstrap/ui-bootstrap.min.js"></script>
+  <script src="bower/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+  <script src="bower/angular-ui-sortable/sortable.min.js"></script>
+
+  <script src="js/app.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/controllers.js"></script>
+  <script src="js/filters.js"></script>
+  <script src="js/directives.js"></script>
+  <script src="js/i18n.js"></script>
+  <script id="google-analytics-js" src="js/lib/google-analytics.js"
+          data-ga-account="{{ ga_account }}"
+          data-ga-domain="{{ ga_domain }}"
+          async>
+  </script>
+</body>
+</html>
