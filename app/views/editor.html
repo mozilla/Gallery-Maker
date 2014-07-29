@@ -1,7 +1,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container">
     <div class="navbar-header">
-      <a href="#" title="" class="navbar-brand">Gallery Maker</a>
+      <a href="/#!" title="" class="navbar-brand">Gallery Maker</a>
     </div>
     <div class="collapse navbar-collapse" collapse="isCollapse">
       <ul class="nav navbar-nav navbar-right">
@@ -13,7 +13,7 @@
     </div>
   </div>
 </nav>
-<div class="container" ng-controller="editorController">
+<div class="container">
   <div class="row">
     <div ng-show="_user.email" class="container col-sm-4" id="user-lists-container" >
       <div class="container col-sm-12 text-center">
@@ -93,7 +93,7 @@
         </ul>
       </div>
       <div class="container col-sm-12">
-        <input type="button" class="btn btn-primary col-sm-12" value="Preview List" ng-disabled="listSaveInProgress"/>
+        <input type="button" class="btn btn-primary col-sm-12" value="Preview List" ng-disabled="listSaveInProgress" ng-click="showPreview()"/>
       </div>
       <div class="container col-sm-12 text-center" ng-show="listSaveInProgress">
         <i class="fa fa-spinner"></i> Saving

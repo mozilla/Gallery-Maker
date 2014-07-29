@@ -169,6 +169,10 @@ angular.module('GalleryMaker.controllers', [])
         }));
       };
 
+      $scope.showPreview = function() {
+        window.location.pathname = "/#!/" + $scope.loadedListId;
+      };
+
       // Make Searching
       $scope.search = {};
       $scope.search.type = 'tags';
@@ -182,9 +186,15 @@ angular.module('GalleryMaker.controllers', [])
       };
     }
   ])
-  .controller('listController', ['$rootScope', '$scope', 'listService',
-    function ($rootScope, $scope, listService) {
-
+  .controller('listController', ['$rootScope', '$scope', '$routeParams', 'listService',
+    function ($rootScope, $scope, $routeParams, listService) {
+      listService.get({
+        id: $routeParams.id
+      }, function(data) {
+        $scope.list = data;
+      }, function(err) {
+        console.error(err);
+      });
     }
   ])
   .controller('verifyController', ['$scope', 'authService',

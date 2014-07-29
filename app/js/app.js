@@ -20,11 +20,11 @@ config(['$routeProvider', '$locationProvider',
 
     $routeProvider.when('/', {
       templateUrl: '/views/editor.html',
-      controllers: 'editorController'
+      controller: 'editorController'
     })
-    .when('/list/:id', {
+    .when('/:id', {
       templateUrl: 'views/list.html',
-      controllers: 'listController'
+      controller: 'listController'
     })
     .otherwise({
       redirectTo: '/'
