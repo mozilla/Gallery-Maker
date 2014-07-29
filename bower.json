@@ -1,11 +1,24 @@
 {
   "name": "Gallery-Maker",
   "dependencies": {
+    "angular": "1.2.15",
+    "angular-route": "1.2.15",
+    "angular-resource": "1.2.15",
+    "angular-sanitize": "1.2.15",
+    "angular-i18n": "1.2.19",
+    "angular-bootstrap": "0.10.0",
+    "angular-ui-sortable": "0.12.8",
+    "font-awesome": "4.0.3",
     "jquery": "~2.1.0",
     "jquery-ui": "~1.10.4",
-    "makeapi-client": "https://github.com/cadecairos/makeapi-client/archive/makelists.tar.gz",
+    "makeapi-client": "0.5.27",
     "makerstrap": "~0.2.2",
     "masonry": "~3.1.5",
-    "webmaker-auth-client": "^0.1.11"
+    "webmaker-auth-client": "^0.1.11",
+    "webmaker-analytics": "0.1.0",
+    "makeapi-angular": "k88hudson/makeapi-angular"
+  },
+  "resolutions": {
+    "angular": "1.2.15"
   }
 }

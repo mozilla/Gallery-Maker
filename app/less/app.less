@@ -1,0 +1,123 @@
+//  Resets --------------------------------------------------------------------
+
+html, body {
+  display: block;
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 1.4rem;
+}
+
+a {
+  cursor: pointer;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+*:focus {
+  outline-color: transparent;
+  outline-style: none;
+}
+
+h1 {
+  font-weight: 100;
+}
+
+p {
+  line-height: 1.7;
+}
+
+img {
+  width: 100%;
+}
+
+//  Bootstrap Overrides -------------------------------------------------------
+
+h1, h2, h3, h4 {
+  font-weight: 200;
+}
+
+// Editor Styles --------------------------------------------------------------
+
+body {
+  background: #e3eaee;
+  padding-top: 70px;
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.thumbnail {
+  border: 1px solid #ccc;
+  padding: 20px;
+  cursor: pointer;
+  transition: none;
+}
+
+table {
+  background: #fff;
+  width: 100%;
+}
+
+th, td {
+  padding: 10px;
+}
+
+td {
+  cursor: pointer;
+}
+
+.delete-btn {
+  position: relative;
+  left: 15px;
+}
+
+.make-thumb {
+  width: 50px !important;
+  padding-right: 10px;
+  display: inline !important;
+}
+
+.thumbnail > a {
+  padding-right: 10px;
+}
+
+#success {
+  color: #c13832;
+}
+
+#new-list-container {
+  padding-top: 5px;
+}
+
+#list-view, #search-list-view {
+  height: 500px;
+  overflow-y: auto;
+  overflow-x: none;
+}
+
+.list-title, .list-description {
+  max-width: 50px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+//  Angular Helpers -----------------------------------------------------------
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak],
+.ng-cloak, .x-ng-cloak,
+.ng-hide {
+  display: none !important;
+}
+
+ng\:form {
+  display: block;
+}
+

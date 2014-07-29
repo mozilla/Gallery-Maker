@@ -1,0 +1,109 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <a href="/#!" title="" class="navbar-brand">Gallery Maker</a>
+    </div>
+    <div class="collapse navbar-collapse" collapse="isCollapse">
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <a href="#" ng-click="login()" ng-show="!_user.email" class="login">Login</a>
+          <a href="#" ng-click="logout()" ng-show="_user.email">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container">
+  <div class="row">
+    <div ng-show="_user.email" class="container col-sm-4" id="user-lists-container" >
+      <div class="container col-sm-12 text-center">
+        <h3>Your Galleries</h3>
+      </div>
+      <div class="container col-sm-12">
+        <table class="table-hover table-bordered">
+          <tbody id="user-lists">
+            <thead>
+              <tr>
+                <th class="text-center">title</th>
+                <th class="text-center">description</th>
+                <th class="text-center">delete</th>
+              </tr>
+            </thead>
+            <tr ng-repeat="list in usersLists">
+              <td class="list-title">{{list.title}}</td>
+              <td class="list-description" ng-click="loadList(list._id)">{{list.description}}</td>
+              <td class="list-delete">
+                <span class="fa fa-trash-o delete-btn" ng-click="deleteList(list._id);"></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="container col-sm-10 col-sm-offset-1" id="new-list-container">
+        <input type="button" class="btn btn-primary col-sm-12" value="Create New List" ng-click="createList()">
+      </div>
+    </div>
+
+    <div ng-show="!_user.email" class="container col-sm-12 text-center">
+      <h2>Please Log-In Above</h2>
+    </div>
+
+    <div ng-show="_user.email && !loadedList" class="container col-sm-8 text-center">
+      <h2>Select a list on the left to begin editing!</h2>
+    </div>
+
+    <div ng-show="_user.email && listLoaded" class="col-sm-4" id="search-area">
+      <div class="container col-sm-12 text-center">
+        <h3>Make Search</h3>
+      </div>
+      <div class="container col-sm-12 form-group">
+        <select ng-change="search.value && doSearch()" ng-model="search.type" class="form-control">
+          <option selected class="ng-binding" value="tags">Tag</option>
+          <option class="ng-binding" value="title">Title</option>
+          <option class="ng-binding" value="description">Description</option>
+          <option class="ng-binding" value="author">User</option>
+        </select>
+      </div>
+      <div class="container col-sm-12 form-group">
+        <input ng-model="search.value" ng-keypress="$event.keyCode === 13 && search.value && doSearch()" ng-blur="search.value && doSearch()" class="form-control" type="text"value="" placeholder="Search Term">
+      </div>
+      <div class="col-sm-12" id="search-list-view">
+        <ul ng-repeat="make in searchResults" class="list-unstyled" id="make-search-list">
+          <li class="thumbnail" ng-click="addMake(make)">
+            <img ng-src="{{make.thumbnail}}" class="make-thumb">
+            <a ng-href="{{make.url}}" title="">{{make.title}}</a>
+            <span>By: {{make.author}}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div ng-show="_user.email && listLoaded" class="col-sm-4">
+      <div class="container col-sm-12 text-center">
+        <h3>Makes in Gallery</h3>
+      </div>
+      <div class="container col-sm-12" id="list-view">
+        <ul ui-sortable="sortableOptions" ng-model="loadedList"  class="list-unstyled">
+          <li ng-repeat="make in loadedList" class="thumbnail">
+            <img ng-src="{{make.thumbnail}}" class="make-thumb">
+            <a ng-href="{{make.url}}" title="">{{make.title}}</a>
+            <span>By: {{make.author}}</span>
+            <span class="fa fa-trash-o delete-btn" ng-click="removeMake(make._id);"></span>
+          </li>
+        </ul>
+      </div>
+      <div class="container col-sm-12">
+        <input type="button" class="btn btn-primary col-sm-12" value="Preview List" ng-disabled="listSaveInProgress" ng-click="showPreview()"/>
+      </div>
+      <div class="container col-sm-12 text-center" ng-show="listSaveInProgress">
+        <i class="fa fa-spinner"></i> Saving
+      </div>
+      <div class="container col-sm-12 text-center" ng-Flash="listSaveSuccess">
+        <i class="fa fa-thumbs-up"></i> Saved
+      </div>
+      <div class="container col-sm-12 text-center" ng-Flash="listSaveError">
+        <i class="fa fa-warning"></i> Error saving
+      </div>
+    </div>
+  </div>
+</div>
