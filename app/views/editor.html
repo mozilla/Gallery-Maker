@@ -72,7 +72,7 @@
           <li class="thumbnail" ng-click="addMake(make)">
             <img ng-src="{{make.thumbnail}}" class="make-thumb">
             <a ng-href="{{make.url}}" title="">{{make.title}}</a>
-            <span>By: {{make.author}}</span>
+            <span>By: {{make.author || make.username}}</span>
           </li>
         </ul>
       </div>
@@ -87,7 +87,7 @@
           <li ng-repeat="make in loadedList" class="thumbnail">
             <img ng-src="{{make.thumbnail}}" class="make-thumb">
             <a ng-href="{{make.url}}" title="">{{make.title}}</a>
-            <span>By: {{make.author}}</span>
+            <span>By: {{make.author || make.username}}</span>
             <span class="fa fa-trash-o delete-btn" ng-click="removeMake(make._id);"></span>
           </li>
         </ul>
