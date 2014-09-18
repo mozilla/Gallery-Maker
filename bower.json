@@ -19,6 +19,7 @@
     "makeapi-angular": "k88hudson/makeapi-angular"
   },
   "resolutions": {
-    "angular": "1.2.15"
+    "angular": "1.2.15",
+    "webmaker-analytics": "~0.1.3"
   }
 }
