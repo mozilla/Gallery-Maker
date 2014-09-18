@@ -2,3 +2,4 @@ node_modules
 app/bower
 app/compiled
 npm-debug.log
+.env
